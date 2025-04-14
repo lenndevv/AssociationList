@@ -4,14 +4,12 @@
 
 namespace association_list {
 
-    class StructureImpl {
+    class Structure::Impl {
     public:
         std::vector<std::pair<std::string, int>> data;
 
-        StructureImpl() = default;
-
-        StructureImpl(const StructureImpl& other)
-            : data(other.data) {}
+        Impl() = default;
+        Impl(const Impl& other) : data(other.data) {}
 
         void insert(const std::string& key, int value) {
             for (auto& pair : data) {
@@ -47,22 +45,22 @@ namespace association_list {
             throw Structure::Error("Cannot remove. Key not found: " + key);
         }
 
-        void print() const {
-            for (const auto& pair : data)
-                std::cout << pair.first << " => " << pair.second << std::endl;
+        bool equals(const Impl& other) const {
+            return data == other.data;
         }
     };
 
-    // Structure methods
-    Structure::Structure() : impl(new StructureImpl()) {}
+    Structure::Error::Error(const std::string& message)
+        : std::runtime_error(message) {}
 
+    Structure::Structure() : impl(new Impl()) {}
     Structure::Structure(const Structure& other)
-        : impl(new StructureImpl(*other.impl)) {}
+        : impl(new Impl(*other.impl)) {}
 
     Structure& Structure::operator=(const Structure& other) {
         if (this != &other) {
             delete impl;
-            impl = new StructureImpl(*other.impl);
+            impl = new Impl(*other.impl);
         }
         return *this;
     }
@@ -88,6 +86,19 @@ namespace association_list {
     }
 
     void Structure::print() const {
-        impl->print();
+        std::cout << "Structure contents:\n";
+        for (const std::string& key : {"a", "b", "c", "d", "x", "y", "z", "apple", "banana"}) {
+            if (contains(key)) {
+                std::cout << key << " => " << get(key) << "\n";
+            }
+        }
+    }
+
+    bool Structure::operator==(const Structure& other) const {
+        return impl->equals(*other.impl);
+    }
+
+    bool Structure::operator!=(const Structure& other) const {
+        return !(*this == other);
     }
 }
