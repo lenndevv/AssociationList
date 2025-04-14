@@ -2,25 +2,29 @@
 #include <iostream>
 
 using namespace association_list;
-using namespace std;
 
 int main() {
     Structure s;
 
     try {
-        s.insert("Apple", 10);
-        s.insert("Banana", 20);
+        s.insert("apple", 10);
+        s.insert("banana", 20);
         s.print();
 
-        cout << "Value for 'Apple': " << s.get("Apple") << endl;
+        std::cout << "Value for 'apple': " << s.get("apple") << std::endl;
 
-        s.remove("Apple");
-        s.print();
+        s.remove("apple");
 
-        // Metamas exception'as
-        cout << s.get("Apple") << endl;
+        Structure s2 = s;
+        s2.insert("banana", 20);
+
+        // lambda expression
+        std::cout << "Structures equal? " << (s == s2 ? "Yes" : "No") << std::endl;
+
+        // bandom pafetchinti istrinta rakta
+        std::cout << s.get("apple") << std::endl;
     } catch (const Structure::Error& e) {
-        cerr << "Caught error: " << e.what() << endl;
+        std::cerr << "Caught error: " << e.what() << std::endl;
     }
 
     return 0;
