@@ -5,12 +5,7 @@
 
 namespace association_list {
 
-    class StructureImpl;
-
     class Structure {
-    private:
-        StructureImpl* impl;
-
     public:
         Structure();
         Structure(const Structure& other);
@@ -23,9 +18,16 @@ namespace association_list {
         void remove(const std::string& key);
         void print() const;
 
+        bool operator==(const Structure& other) const;
+        bool operator!=(const Structure& other) const;
+
         class Error : public std::runtime_error {
         public:
-            Error(const std::string& message) : std::runtime_error(message) {}
+            explicit Error(const std::string& message);
         };
+
+    private:
+        class Impl;
+        Impl* impl;
     };
 }
